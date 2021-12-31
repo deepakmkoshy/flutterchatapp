@@ -1,6 +1,6 @@
+import 'package:chatapp/views/views.dart';
 import 'package:flutter/material.dart';
 
-import 'views/chat_screen.dart';
 
 void main() {
   runApp(const MyApp());
