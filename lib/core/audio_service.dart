@@ -5,40 +5,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
-class Audiooo extends StatefulWidget {
-  const Audiooo({Key? key}) : super(key: key);
-
-  @override
-  State<Audiooo> createState() => _AudioooState();
-}
-
-class _AudioooState extends State<Audiooo> {
-  // Obtain mic permission from user
-  Future<void> getPermissions() async {
-    var statusMic = await Permission.microphone.request();
-
-    // Asking again for permission
-    if (statusMic == PermissionStatus.denied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Kindly allow mic access for sending voice messages'),
-        ),
-      );
-      getPermissions();
-    }
-  }
-
-  @override
-  void initState() {
-    getPermissions();
-    initRec();
-    super.initState();
-  }
-
+class AudioProvider extends ChangeNotifier {
 // TMP utils to be moved to other folder
   late FlutterSoundRecorder _mRecorder;
   bool _mRecorderIsInited = false;
@@ -48,6 +18,14 @@ class _AudioooState extends State<Audiooo> {
   bool _mplaybackReady = true;
   String dur = "0:00";
   String tmpUrl = "www";
+
+   //getters
+  bool get isPlaying => _mPlayer.isPlaying;
+  bool get isRecStopped => _mRecorder.isStopped;
+  String get mPath => _mPath;
+  String get durat => dur;
+  String get tUrl => tmpUrl;
+
 
   Future<void> openTheRecorder() async {
     await _mRecorder.openAudioSession();
@@ -59,10 +37,11 @@ class _AudioooState extends State<Audiooo> {
     _mRecorder = FlutterSoundRecorder();
     _mPlayer.openAudioSession().then((value) {
       _mPlayerIsInited = true;
-      //   notifyListeners();
+      notifyListeners();
     });
     openTheRecorder().then((value) {
       _mRecorderIsInited = true; //reduntant
+      notifyListeners();
     });
   }
 
@@ -81,6 +60,7 @@ class _AudioooState extends State<Audiooo> {
 
   Future<void> stopPlayer() async {
     await _mPlayer.stopPlayer();
+    notifyListeners();
   }
 
   // Future<void> getAudioDetails(){
@@ -111,7 +91,7 @@ class _AudioooState extends State<Audiooo> {
   }
 
   void play(String url) async {
-    tmpUrl = _mPath;
+    tmpUrl = url;
     print(url);
 
     assert(_mPlayerIsInited &&
@@ -120,12 +100,10 @@ class _AudioooState extends State<Audiooo> {
         _mPlayer.isStopped);
 
     await _mPlayer.startPlayer(
-        fromURI: _mPath,
+        fromURI: url,
         codec: Codec.aacADTS,
         whenFinished: () {
           print('Finished PLaying');
-          isPlaying = false;
-          setState(() {});
         });
   }
 
@@ -133,64 +111,6 @@ class _AudioooState extends State<Audiooo> {
     await _mRecorder.stopRecorder();
     print(
         "############\n##################\n\nAudio file created at " + _mPath);
-    //_mplaybackReady = true;
-  }
-
-// var for build
-  bool isRecording = false;
-  bool isPlaying = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    if (!isRecording) {
-                      record();
-                      isRecording = true;
-                      setState(() {});
-                    }
-                  },
-                  icon: const Icon(Icons.mic),
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (isRecording) {
-                      stopRecorder();
-                      isRecording = false;
-                      setState(() {});
-                    }
-                  },
-                  icon: const Icon(Icons.stop),
-                ),
-                SizedBox(width: 10),
-                Text(isRecording
-                    ? 'Recording in progress...'
-                    : 'Recording Stopped')
-              ],
-            ),
-            IconButton(
-              onPressed: () {
-                play(_mPath);
-                isPlaying = true;
-                setState(() {});
-              },
-              icon: Icon(Icons.play_arrow),
-            ),
-            Text(isPlaying ? 'Audio is playing...' : 'Not playing!')
-          ],
-        ),
-      ),
-    );
+    _mplaybackReady = true;
   }
 }

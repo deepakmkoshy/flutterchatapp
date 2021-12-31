@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 
 class MessageStream extends StatelessWidget {
   final List<MessageModel> messageModels;
-
-  const MessageStream({Key? key, required this.messageModels})
-      : super(key: key);
+  MessageStream({Key? key, required this.messageModels}) : super(key: key);
 
   List<ChooseContent> createChatWidgets() {
     final messages = messageModels;
