@@ -3,12 +3,18 @@ import 'package:chatapp/models/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ChatVoiceWidget extends StatelessWidget {
+class ChatVoiceWidget extends StatefulWidget {
   final ParseModel parseModel;
   const ChatVoiceWidget({required this.parseModel});
 
+  @override
+  State<ChatVoiceWidget> createState() => _ChatVoiceWidgetState();
+}
+
+class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
   bool isMe() {
-    return parseModel.messageModel.senderId == parseModel.currentUserId;
+    return widget.parseModel.messageModel.senderId ==
+        widget.parseModel.currentUserId;
   }
 
   @override
@@ -41,16 +47,20 @@ class ChatVoiceWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       IconButton(
-                          onPressed: () {
-                            var stat = context.watch<AudioProvider>();
+                          onPressed: () async {
+                            var stat = Provider.of<AudioProvider>(context,
+                                listen: false);
 
                             if (stat.isPlaying) {
-                              stat.stopPlayer();
+                              await stat.stopPlayer();
+                              setState(() {});
                             } else {
-                              stat.play(parseModel.messageModel.contentUri);
+                              await stat.play(
+                                  widget.parseModel.messageModel.contentUri);
+                              setState(() {});
                             }
                           },
-                          icon: context.watch<AudioProvider>().isPlaying
+                          icon: context.read<AudioProvider>().isPlaying
                               ? Icon(Icons.stop)
                               : Icon(Icons.play_arrow))
                     ],

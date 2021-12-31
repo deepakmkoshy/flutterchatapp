@@ -90,7 +90,7 @@ class AudioProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  void play(String url) async {
+  Future<void> play(String url) async {
     tmpUrl = url;
     print(url);
 

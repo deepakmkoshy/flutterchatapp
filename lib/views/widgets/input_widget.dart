@@ -18,7 +18,7 @@ class _InputWidgetState extends State<InputWidget> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<AudioProvider>(context).initRec();
+    Provider.of<AudioProvider>(context, listen: false).initRec();
     super.didChangeDependencies();
   }
 
@@ -83,6 +83,8 @@ class _InputWidgetState extends State<InputWidget> {
                   context.read<MessageProvider>().addMessage(newMessage);
                   _chatEditingController.clear();
                   recordButtonVisible = true;
+                  sendButtonVisible = false;
+                  setState(() {});
                   print('Message Sent');
                 },
                 icon: const Icon(Icons.send),
@@ -97,7 +99,6 @@ class _InputWidgetState extends State<InputWidget> {
                   sendButtonVisible = false;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      
                       content: Text('Recording... Release to sent'),
                     ),
                   );
