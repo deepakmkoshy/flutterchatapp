@@ -1,5 +1,10 @@
+import 'package:chatapp/constants/initial_message_list.dart';
+import 'package:chatapp/core/get_permission.dart';
+import 'package:chatapp/models/message_model.dart';
+import 'package:chatapp/views/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
+
+import '../widgets/message_stream.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -9,28 +14,33 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  Future<void> getPermissions() async {
-    var statusMic = await Permission.microphone.request();
-
-    // Asking again for permission
-    if (statusMic == PermissionStatus.denied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Kindly allow mic access for sending voice messages'),
-        ),
-      );
-      getPermissions();
-    }
-  }
+  late List<MessageModel> messageModels;
 
   @override
   void initState() {
     getPermissions();
+    messageModels = messageList;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Chat'),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: MessageStream(messageModels: messageModels,),
+            ),
+            Container(
+              child: InputWidget(),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

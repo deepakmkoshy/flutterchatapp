@@ -34,9 +34,7 @@ class ChatTextWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: Text(
                 parseModel.messageModel.contentUri,
-                style: TextStyle(
-                    color: isMe() ? Colors.white : Colors.black54,
-                    fontSize: 15),
+                style: TextStyle(color: Colors.black54, fontSize: 15),
               ),
             ),
           ),
