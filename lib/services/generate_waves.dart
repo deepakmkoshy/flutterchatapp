@@ -12,7 +12,7 @@ List<AudioWaveBar> waves(List<double> decibelList) {
     } else {
       bars.add(AudioWaveBar(height: 0, color: Palette.secondaryColor));
     }
-    if (decList.length > 20) {
+    if (decList.length > 30) {
       for (int i = 0; i < decList.length; i++) {
         if (i % 2 == 0) {
           decList.removeAt(i);
@@ -21,4 +21,19 @@ List<AudioWaveBar> waves(List<double> decibelList) {
     }
   }
   return bars;
+}
+
+double findWidth(List<double> decibelList) {
+  int len = decibelList.length;
+  if (len < 6) {
+    return 60.0;
+  } else if (len < 12) {
+    return 100.0;
+  } else if (len < 18) {
+    return 120.0;
+  } else if (len < 26) {
+    return 160.0;
+  } else {
+    return 180.0;
+  }
 }

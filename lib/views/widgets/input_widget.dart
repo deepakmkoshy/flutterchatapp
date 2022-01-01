@@ -8,10 +8,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/random_string.dart';
-
 class InputWidget extends StatefulWidget {
-  InputWidget({Key? key}) : super(key: key);
+  const InputWidget({Key? key}) : super(key: key);
 
   @override
   _InputWidgetState createState() => _InputWidgetState();
@@ -41,6 +39,7 @@ class _InputWidgetState extends State<InputWidget> {
     myFocusNode.dispose();
     super.dispose();
   }
+  // TODO: Push messageprovider Consumer up the tree
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +127,6 @@ class _InputWidgetState extends State<InputWidget> {
                   recordButtonVisible = true;
                   sendButtonVisible = false;
                   setState(() {});
-                  print('Message Sent');
                 },
                 icon: const Icon(Icons.send),
               ),
@@ -142,7 +140,6 @@ class _InputWidgetState extends State<InputWidget> {
                   onLongPress: () async {
                     sendButtonVisible = false;
                     _chatEditingController.text = 'Recording...';
-
                     value.record();
                   },
                   onLongPressEnd: (longPressEndDetails) async {
@@ -157,7 +154,6 @@ class _InputWidgetState extends State<InputWidget> {
                     );
 
                     msg.addMessage(newMessage);
-                    print('Voice Note Sent');
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(8.0),

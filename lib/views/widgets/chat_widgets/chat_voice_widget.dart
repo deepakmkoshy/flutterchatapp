@@ -27,21 +27,15 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
         crossAxisAlignment:
             isMe() ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          // Text(
-          //   message.data()['name'],
-          //   style: TextStyle(fontSize: 12, color: Colors.black54),
-          // ),
           Consumer<AudioProvider>(
             builder: (context, value, child) => Material(
               elevation: 1,
-
               borderRadius: BorderRadius.only(
-                topRight: isMe() ? Radius.zero : Radius.circular(30),
-                topLeft: isMe() ? Radius.circular(30) : Radius.zero,
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
+                topRight: isMe() ? Radius.zero : const Radius.circular(30),
+                topLeft: isMe() ? const Radius.circular(30) : Radius.zero,
+                bottomLeft: const Radius.circular(30),
+                bottomRight: const Radius.circular(30),
               ),
-              // color: isMe() ? Colors.grey : Colors.white,
               color: Colors.grey[200],
               child: Padding(
                 padding:
@@ -66,8 +60,8 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
                       icon: (value.isPlaying &&
                               value.tUrl ==
                                   widget.parseModel.messageModel.contentUri)
-                          ? Icon(Icons.stop)
-                          : Icon(Icons.play_arrow),
+                          ? const Icon(Icons.stop)
+                          : const Icon(Icons.play_arrow),
                     ),
                     // (value.isPlaying &&
                     //         value.tUrl ==
@@ -82,9 +76,9 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
                     AudioWave(
                       animation: false,
                       beatRate: const Duration(milliseconds: 300),
-                      width: 100,
+                      width: findWidth(
+                          widget.parseModel.messageModel.decibelList!),
                       height: 80,
-                      animationLoop: 0,
                       bars: waves(widget.parseModel.messageModel.decibelList!),
                     ),
                   ],
