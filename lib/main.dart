@@ -2,7 +2,7 @@ import 'package:chatapp/views/views.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'core/audio_service.dart';
+import 'provider/audio_provider.dart';
 import 'provider/message_provider.dart';
 
 void main() {

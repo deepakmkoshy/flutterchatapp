@@ -1,4 +1,4 @@
-import 'package:chatapp/core/audio_service.dart';
+import 'package:chatapp/provider/audio_provider.dart';
 import 'package:chatapp/models/message_model.dart';
 import 'package:chatapp/provider/message_provider.dart';
 import 'package:flutter/material.dart';
@@ -76,10 +76,9 @@ class _InputWidgetState extends State<InputWidget> {
                   MessageModel newMessage = MessageModel(
                       senderId: context.read<MessageProvider>().currentUser,
                       sentTime: DateTime.now(),
-                      content: (_chatEditingController.text.isEmpty)
-                          ? Content.voice
-                          : Content.text,
-                      contentUri: _chatEditingController.text);
+                      content: Content.text,
+                      contentUri: _chatEditingController.text,
+                      decibelList: []);
                   context.read<MessageProvider>().addMessage(newMessage);
                   _chatEditingController.clear();
                   recordButtonVisible = true;
@@ -91,30 +90,35 @@ class _InputWidgetState extends State<InputWidget> {
               ),
             ),
           ),
-          Consumer<AudioProvider>(
-            builder: (context, value, child) => Visibility(
-              visible: recordButtonVisible,
-              child: GestureDetector(
-                onLongPress: () async {
-                  sendButtonVisible = false;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Recording... Release to sent'),
-                    ),
-                  );
-                  context.read<AudioProvider>().record();
-                },
-                onLongPressEnd: (longPressEndDetails) async {
-                  await context.read<AudioProvider>().stopRecorder();
-                  MessageModel newMessage = MessageModel(
+          Consumer<MessageProvider>(
+            builder: (context, msg, child) => Consumer<AudioProvider>(
+              builder: (context, value, child) => Visibility(
+                visible: recordButtonVisible,
+                child: GestureDetector(
+                  onLongPress: () async {
+                    sendButtonVisible = false;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Recording... Release to sent'),
+                      ),
+                    );
+                    value.record();
+                  },
+                  onLongPressEnd: (longPressEndDetails) async {
+                    await value.stopRecorder();
+                    MessageModel newMessage = MessageModel(
                       senderId: context.read<MessageProvider>().currentUser,
                       sentTime: DateTime.now(),
                       content: Content.voice,
-                      contentUri: context.read<AudioProvider>().mPath);
-                  context.read<MessageProvider>().addMessage(newMessage);
-                  print('Voice Note Sent');
-                },
-                child: const Icon(Icons.mic),
+                      contentUri: value.mPath,
+                      decibelList: List.from(value.decibelList),
+                    );
+                    
+                    msg.addMessage(newMessage);
+                    print('Voice Note Sent');
+                  },
+                  child: const Icon(Icons.mic),
+                ),
               ),
             ),
           )

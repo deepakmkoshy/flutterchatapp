@@ -1,11 +1,12 @@
-import 'package:chatapp/core/audio_service.dart';
+import 'package:audio_wave/audio_wave.dart';
+import 'package:chatapp/provider/audio_provider.dart';
 import 'package:chatapp/models/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatVoiceWidget extends StatefulWidget {
   final ParseModel parseModel;
-  const ChatVoiceWidget({required this.parseModel});
+  const ChatVoiceWidget({Key? key, required this.parseModel}) : super(key: key);
 
   @override
   State<ChatVoiceWidget> createState() => _ChatVoiceWidgetState();
@@ -15,6 +16,24 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
   bool isMe() {
     return widget.parseModel.messageModel.senderId ==
         widget.parseModel.currentUserId;
+  }
+
+  List<AudioWaveBar> waves() {
+    List<AudioWaveBar> bars = [];
+    List<double> decList = widget.parseModel.messageModel.decibelList!;
+    for (var dec in decList) {
+      if (!(dec.isNegative)) {
+        bars.add(AudioWaveBar(height: dec, color: Colors.purple.shade400));
+      }
+      if (decList.length > 20) {
+        for (int i = 0; i < decList.length; i++) {
+          if (i % 2 == 0) {
+            decList.removeAt(i);
+          }
+        }
+      }
+    }
+    return bars;
   }
 
   @override
@@ -42,29 +61,52 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
               // color: isMe() ? Colors.grey : Colors.white,
               color: Colors.grey[200],
               child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () async {
-                            var stat = Provider.of<AudioProvider>(context,
-                                listen: false);
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        var stat =
+                            Provider.of<AudioProvider>(context, listen: false);
 
-                            if (stat.isPlaying) {
-                              await stat.stopPlayer();
-                              setState(() {});
-                            } else {
-                              await stat.play(
-                                  widget.parseModel.messageModel.contentUri);
-                              setState(() {});
-                            }
-                          },
-                          icon: context.read<AudioProvider>().isPlaying
-                              ? Icon(Icons.stop)
-                              : Icon(Icons.play_arrow))
-                    ],
-                  )),
+                        if (stat.isPlaying) {
+                          await stat.stopPlayer();
+                          setState(() {});
+                        } else {
+                          await stat
+                              .play(widget.parseModel.messageModel.contentUri);
+                          setState(() {});
+                        }
+                      },
+                      icon: (value.isPlaying &&
+                              value.tUrl ==
+                                  widget.parseModel.messageModel.contentUri)
+                          ? Icon(Icons.stop)
+                          : Icon(Icons.play_arrow),
+                    ),
+                    // (value.isPlaying &&
+                    //         value.tUrl ==
+                    //             widget.parseModel.messageModel.contentUri)
+                    //     ? AudioWave(
+                    //         beatRate: const Duration(milliseconds: 300),
+                    //         width: 100,
+                    //         height: 70,
+                    //         animationLoop: 0,
+                    //         bars: waves(),
+                    //       ):
+                    AudioWave(
+                      animation: true,
+                      beatRate: const Duration(milliseconds: 300),
+                      width: 100,
+                      height: 70,
+                      animationLoop: 0,
+                      bars: waves(),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           const SizedBox(

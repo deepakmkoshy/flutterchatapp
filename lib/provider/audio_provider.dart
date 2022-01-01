@@ -19,13 +19,14 @@ class AudioProvider extends ChangeNotifier {
   String dur = "0:00";
   String tmpUrl = "www";
 
-   //getters
+  List<double> decibelList = [];
+
+  //getters
   bool get isPlaying => _mPlayer.isPlaying;
   bool get isRecStopped => _mRecorder.isStopped;
   String get mPath => _mPath;
   String get durat => dur;
   String get tUrl => tmpUrl;
-
 
   Future<void> openTheRecorder() async {
     await _mRecorder.openAudioSession();
@@ -43,7 +44,29 @@ class AudioProvider extends ChangeNotifier {
       _mRecorderIsInited = true; //reduntant
       notifyListeners();
     });
+
+    _mRecorder.setSubscriptionDuration(Duration(milliseconds: 300));
+    var _audioRecorderSubscription = _mRecorder.onProgress!.listen((e) {
+      decibelList.add(e.decibels!);
+      print('&&&&&&&&&&&&&&\t   DB level ${e.decibels}');
+      // _dbLevel = e.decibels!;
+    });
   }
+
+  // HELPER
+
+  void getHelp() async {
+    // await _mRecorder.setSubscriptionDuration(Duration(milliseconds: 100));
+    // var _audioRecorderSubscription = _mRecorder.onProgress!.listen((e) {
+    //   _dbLevel = e.decibels!;
+    // });
+
+    //   var tempDir = await getApplicationDocumentsDirectory();
+    //   String newFilePath = p.join(tempDir.path, getRandString(10));
+    //   String newPath = '$newFilePath.pcm';
+    //   flutterSoundHelper.convertFile(_mPath, Codec.aacADTS,newPath , Codec.pcmFloat32)
+  }
+  // END HELPER
 
   void dispRec() {
     _mPlayer.closeAudioSession();
@@ -74,6 +97,7 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> record() async {
+    decibelList.clear();
     var tempDir = await getApplicationDocumentsDirectory();
     String newFilePath = p.join(tempDir.path, getRandString(10));
     _mPath = '$newFilePath.aac';
@@ -87,7 +111,8 @@ class AudioProvider extends ChangeNotifier {
       toFile: _mPath,
       codec: Codec.aacADTS,
     );
-    // notifyListeners();
+
+    notifyListeners();
   }
 
   Future<void> play(String url) async {
@@ -103,6 +128,7 @@ class AudioProvider extends ChangeNotifier {
         fromURI: url,
         codec: Codec.aacADTS,
         whenFinished: () {
+          stopPlayer();
           print('Finished PLaying');
         });
   }

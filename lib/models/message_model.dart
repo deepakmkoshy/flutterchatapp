@@ -1,11 +1,12 @@
 enum Content { media, text, voice }
 
 class MessageModel {
-  String senderId;
-  DateTime sentTime;
-  Content content;
-  String contentUri;
-  //Here contentUri would be the 
+  final String senderId;
+  final DateTime sentTime;
+  final Content content;
+  final String contentUri;
+  final List<double>? decibelList;
+  //Here contentUri would be the
   //message in text,
   //Audio path in voice,
   //Image/Video path in media
@@ -14,7 +15,8 @@ class MessageModel {
       {required this.senderId,
       required this.sentTime,
       required this.content,
-      required this.contentUri});
+      required this.contentUri,
+      required this.decibelList});
 }
 
 class ParseModel {
