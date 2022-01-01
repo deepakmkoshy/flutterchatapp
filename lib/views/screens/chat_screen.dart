@@ -29,15 +29,21 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        centerTitle: true,
+        title: Text(
+          'Chat',
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        elevation: 0,
       ),
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Consumer<MessageProvider>(
                 builder: (context, value, child) => MessageStream(
-                  messageModels: context.watch<MessageProvider>().messageModels,
+                  messageModels: value.messageModels,
                 ),
               ),
             ),

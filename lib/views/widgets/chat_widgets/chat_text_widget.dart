@@ -1,3 +1,4 @@
+import 'package:chatapp/constants/palette.dart';
 import 'package:chatapp/models/message_model.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class ChatTextWidget extends StatelessWidget {
               bottomRight: Radius.circular(30),
             ),
             // color: isMe() ? Colors.grey : Colors.white,
-            color: Colors.grey[200],
+            color: Palette.backgroundColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: Text(
