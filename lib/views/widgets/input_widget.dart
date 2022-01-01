@@ -151,6 +151,7 @@ class _InputWidgetState extends State<InputWidget> {
                       content: Content.voice,
                       contentUri: value.mPath,
                       decibelList: List.from(value.decibelList),
+                      duration: value.durat
                     );
 
                     msg.addMessage(newMessage);

@@ -6,6 +6,7 @@ class MessageModel {
   final Content content;
   final String contentUri;
   final List<double>? decibelList;
+  String duration;
   //Here contentUri would be the
   //message in text,
   //Audio path in voice,
@@ -16,7 +17,8 @@ class MessageModel {
       required this.sentTime,
       required this.content,
       required this.contentUri,
-      required this.decibelList});
+      required this.decibelList,
+      this.duration=''});
 }
 
 class ParseModel {

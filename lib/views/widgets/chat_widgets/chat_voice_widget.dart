@@ -81,6 +81,8 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
                       height: 80,
                       bars: waves(widget.parseModel.messageModel.decibelList!),
                     ),
+                    const SizedBox(width: 4),
+                    Text(widget.parseModel.messageModel.duration)
                   ],
                 ),
               ),

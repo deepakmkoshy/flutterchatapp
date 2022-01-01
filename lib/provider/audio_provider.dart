@@ -51,26 +51,26 @@ class AudioProvider extends ChangeNotifier {
     });
   }
 
-  // HELPER
+  // Get Duration of audio file
 
-  void getHelp() async {
-    // await _mRecorder.setSubscriptionDuration(Duration(milliseconds: 100));
-    // var _audioRecorderSubscription = _mRecorder.onProgress!.listen((e) {
-    //   _dbLevel = e.decibels!;
-    // });
-
-    //   var tempDir = await getApplicationDocumentsDirectory();
-    //   String newFilePath = p.join(tempDir.path, getRandString(10));
-    //   String newPath = '$newFilePath.pcm';
-    //   flutterSoundHelper.convertFile(_mPath, Codec.aacADTS,newPath , Codec.pcmFloat32)
+  Future<void> duration() async {
+    await flutterSoundHelper.duration(_mPath).then((value) {
+      if (value != null) {
+        int sec = value.inSeconds;
+        if (sec < 10) {
+          dur = "0:0$sec";
+        } else {
+          dur = "0:$sec";
+        }
+      }
+      notifyListeners();
+    });
   }
-  // END HELPER
 
   void dispRec() {
     _mPlayer.closeAudioSession();
     stopRecorder();
     _mRecorder.closeAudioSession();
-    // _mRecorder = null;
     if (_mPath != null) {
       var outputFile = File(_mPath);
       if (outputFile.existsSync()) {
@@ -121,12 +121,13 @@ class AudioProvider extends ChangeNotifier {
         codec: Codec.aacADTS,
         whenFinished: () {
           stopPlayer();
-          print('Finished PLaying');
         });
   }
 
   Future<void> stopRecorder() async {
     await _mRecorder.stopRecorder();
+    await duration();
+    notifyListeners();
     print(
         "############\n##################\n\nAudio file created at " + _mPath);
     _mplaybackReady = true;

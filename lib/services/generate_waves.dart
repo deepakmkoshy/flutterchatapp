@@ -3,7 +3,24 @@ import 'package:chatapp/constants/palette.dart';
 
 List<AudioWaveBar> waves(List<double> decibelList) {
   List<AudioWaveBar> bars = [];
-  List<double> decList = decibelList;
+  List<double> decList = List.from(decibelList);
+
+  if (decList.length >= 32 && decList.length < 46) {
+    int len = decList.length;
+    int c = 0;
+    bool tmp = false;
+    for (int i = 0; i < len; i++) {
+      if (tmp) {
+        decList.removeAt(c);
+        c++;
+        tmp = !tmp;
+      } else {
+        tmp = !tmp;
+      }
+    }
+  }
+
+   
 
   for (var dec in decList) {
     dec = dec - 20;
@@ -11,13 +28,6 @@ List<AudioWaveBar> waves(List<double> decibelList) {
       bars.add(AudioWaveBar(height: dec, color: Palette.secondaryColor));
     } else {
       bars.add(AudioWaveBar(height: 0, color: Palette.secondaryColor));
-    }
-    if (decList.length > 30) {
-      for (int i = 0; i < decList.length; i++) {
-        if (i % 2 == 0) {
-          decList.removeAt(i);
-        }
-      }
     }
   }
   return bars;
