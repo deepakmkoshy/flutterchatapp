@@ -10,7 +10,7 @@ List<UserModel> users = [
       photoURL: 'https://ozgrozer.github.io/100k-faces/0/1/001420.jpg',
       userId: '5368976915'),
   UserModel(
-      name: 'Aravind Reddy',
+      name: 'Aravind Noel',
       photoURL: 'https://ozgrozer.github.io/100k-faces/0/6/006475.jpg',
       userId: 'user1')
 ];

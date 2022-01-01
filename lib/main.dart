@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(backgroundColor: Palette.backgroundColor),
         fontFamily: GoogleFonts.jost().fontFamily,
         textTheme: GoogleFonts.jostTextTheme(),
+        
       ),
       home: const ChatScreen(),
     );

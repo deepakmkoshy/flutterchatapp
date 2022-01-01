@@ -1,3 +1,4 @@
+import 'package:chatapp/constants/palette.dart';
 import 'package:chatapp/provider/audio_provider.dart';
 import 'package:chatapp/models/message_model.dart';
 import 'package:chatapp/provider/message_provider.dart';
@@ -35,7 +36,12 @@ class _InputWidgetState extends State<InputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Container(
+      decoration: BoxDecoration(
+          color: Palette.backgroundColor,
+          borderRadius: BorderRadius.circular(32.0)),
+      padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(16.0),
       child: Row(
         children: [
           IconButton(
@@ -52,8 +58,12 @@ class _InputWidgetState extends State<InputWidget> {
           ),
           Expanded(
             child: TextField(
+              cursorColor: Palette.secondaryColor,
               controller: _chatEditingController,
-              decoration: const InputDecoration(hintText: 'Type your Comment'),
+              decoration: InputDecoration(
+                  hintText: 'Type your Comment',
+                  focusColor: Palette.secondaryColor,
+                  border: InputBorder.none),
               onChanged: (value) {
                 setState(() {
                   if (value == '') {
@@ -72,6 +82,7 @@ class _InputWidgetState extends State<InputWidget> {
             builder: (context, value, child) => Visibility(
               visible: sendButtonVisible,
               child: IconButton(
+                splashColor: Palette.secondaryColor,
                 onPressed: () {
                   MessageModel newMessage = MessageModel(
                       senderId: context.read<MessageProvider>().currentUser,
@@ -113,11 +124,16 @@ class _InputWidgetState extends State<InputWidget> {
                       contentUri: value.mPath,
                       decibelList: List.from(value.decibelList),
                     );
-                    
+
                     msg.addMessage(newMessage);
                     print('Voice Note Sent');
                   },
-                  child: const Icon(Icons.mic),
+                  child:const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.mic,
+                    ),
+                  ),
                 ),
               ),
             ),

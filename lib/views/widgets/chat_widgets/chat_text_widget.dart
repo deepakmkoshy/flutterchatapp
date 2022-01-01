@@ -1,5 +1,6 @@
 import 'package:chatapp/constants/palette.dart';
 import 'package:chatapp/models/message_model.dart';
+import 'package:chatapp/services/find_photoURL.dart';
 import 'package:flutter/material.dart';
 
 class ChatTextWidget extends StatelessWidget {
@@ -17,10 +18,22 @@ class ChatTextWidget extends StatelessWidget {
         crossAxisAlignment:
             isMe() ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          // Text(
-          //   message.data()['name'],
-          //   style: TextStyle(fontSize: 12, color: Colors.black54),
-          // ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 14,
+                backgroundImage:
+                    NetworkImage(getPhotoURL(parseModel.messageModel.senderId)),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                getName(parseModel.messageModel.senderId),
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
           Material(
             elevation: 2,
             borderRadius: BorderRadius.only(
@@ -35,7 +48,7 @@ class ChatTextWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: Text(
                 parseModel.messageModel.contentUri,
-                style: TextStyle(color: Colors.black54, fontSize: 15),
+                style: TextStyle(color: Colors.black87, fontSize: 15),
               ),
             ),
           ),

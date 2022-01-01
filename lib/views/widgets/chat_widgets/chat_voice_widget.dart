@@ -1,6 +1,7 @@
 import 'package:audio_wave/audio_wave.dart';
 import 'package:chatapp/provider/audio_provider.dart';
 import 'package:chatapp/models/message_model.dart';
+import 'package:chatapp/services/generate_waves.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,24 +17,6 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
   bool isMe() {
     return widget.parseModel.messageModel.senderId ==
         widget.parseModel.currentUserId;
-  }
-
-  List<AudioWaveBar> waves() {
-    List<AudioWaveBar> bars = [];
-    List<double> decList = widget.parseModel.messageModel.decibelList!;
-    for (var dec in decList) {
-      if (!(dec.isNegative)) {
-        bars.add(AudioWaveBar(height: dec, color: Colors.purple.shade400));
-      }
-      if (decList.length > 20) {
-        for (int i = 0; i < decList.length; i++) {
-          if (i % 2 == 0) {
-            decList.removeAt(i);
-          }
-        }
-      }
-    }
-    return bars;
   }
 
   @override
@@ -97,12 +80,12 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
                     //         bars: waves(),
                     //       ):
                     AudioWave(
-                      animation: true,
+                      animation: false,
                       beatRate: const Duration(milliseconds: 300),
                       width: 100,
                       height: 70,
                       animationLoop: 0,
-                      bars: waves(),
+                      bars: waves(widget.parseModel.messageModel.decibelList!),
                     ),
                   ],
                 ),

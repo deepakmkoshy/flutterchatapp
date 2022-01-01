@@ -1,7 +1,7 @@
 import 'package:chatapp/constants/initial_message_list.dart';
-import 'package:chatapp/core/get_permission.dart';
 import 'package:chatapp/models/message_model.dart';
 import 'package:chatapp/provider/message_provider.dart';
+import 'package:chatapp/services/get_permission.dart';
 import 'package:chatapp/views/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Consumer<MessageProvider>(
@@ -47,9 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ),
-            Container(
-              child: InputWidget(),
-            )
+            InputWidget()
           ],
         ),
       ),
