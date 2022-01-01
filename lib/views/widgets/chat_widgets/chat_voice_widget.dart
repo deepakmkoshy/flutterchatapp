@@ -1,4 +1,5 @@
 import 'package:audio_wave/audio_wave.dart';
+import 'package:chatapp/constants/palette.dart';
 import 'package:chatapp/provider/audio_provider.dart';
 import 'package:chatapp/models/message_model.dart';
 import 'package:chatapp/services/generate_waves.dart';
@@ -66,21 +67,79 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
                     // (value.isPlaying &&
                     //         value.tUrl ==
                     //             widget.parseModel.messageModel.contentUri)
-                    //     ? AudioWave(
-                    //         beatRate: const Duration(milliseconds: 300),
-                    //         width: 100,
-                    //         height: 70,
-                    //         animationLoop: 0,
-                    //         bars: waves(),
-                    //       ):
-                    AudioWave(
-                      animation: false,
-                      beatRate: const Duration(milliseconds: 300),
-                      width: findWidth(
-                          widget.parseModel.messageModel.decibelList!),
-                      height: 80,
-                      bars: waves(widget.parseModel.messageModel.decibelList!),
+                    // ?
+                    // AudioWave(
+                    //   beatRate: const Duration(milliseconds: 300),
+                    //   width: 100,
+                    //   height: 70,
+                    //   animationLoop: 0,
+                    //   bars: waves(widget.parseModel.messageModel.decibelList!,
+                    //       Palette.secondaryColor),
+                    // ),
+
+                    Stack(
+                      children: [
+                        AudioWave(
+                          animation: false,
+                          animationLoop: 0,
+                          beatRate: const Duration(milliseconds: 300),
+                          width: findWidth(
+                              widget.parseModel.messageModel.decibelList!),
+                          height: 80,
+                          bars: waves(
+                              widget.parseModel.messageModel.decibelList!,
+                              Colors.grey),
+                        ),
+                        if (value.isPlaying &&
+                            value.tUrl ==
+                                widget.parseModel.messageModel.contentUri) ...[
+                          AudioWave(
+                            animation: true,
+                            animationLoop: 0,
+                            beatRate: const Duration(milliseconds: 300),
+                            width: findWidth(
+                                widget.parseModel.messageModel.decibelList!),
+                            height: 80,
+                            bars: waves(
+                                widget.parseModel.messageModel.decibelList!,
+                                Palette.secondaryColor),
+                          ),
+                        ],
+                      ],
                     ),
+
+                    // if (value.isPlaying &&
+                    //     value.tUrl ==
+                    //         widget.parseModel.messageModel.contentUri) ...[
+                    //   AudioWave(
+                    //     animation: true,
+                    //     animationLoop: 0,
+                    //     beatRate: const Duration(milliseconds: 300),
+                    //     width: findWidth(
+                    //         widget.parseModel.messageModel.decibelList!),
+                    //     height: 80,
+                    //     bars: waves(widget.parseModel.messageModel.decibelList!,
+                    //         Palette.secondaryColor),
+                    //   ),
+                    // ] else ...[
+                    //   AudioWave(
+                    //     animation: false,
+                    //     beatRate: const Duration(milliseconds: 300),
+                    //     width: findWidth(
+                    //         widget.parseModel.messageModel.decibelList!),
+                    //     height: 80,
+                    //     bars: waves(widget.parseModel.messageModel.decibelList!,
+                    //         Colors.grey),
+                    //   ),
+                    // ],
+                    // AudioWave(
+                    //   animation: false,
+                    //   beatRate: const Duration(milliseconds: 300),
+                    //   width: findWidth(
+                    //       widget.parseModel.messageModel.decibelList!),
+                    //   height: 80,
+                    //   bars: waves(widget.parseModel.messageModel.decibelList!),
+                    // ),
                     const SizedBox(width: 4),
                     Text(widget.parseModel.messageModel.duration)
                   ],

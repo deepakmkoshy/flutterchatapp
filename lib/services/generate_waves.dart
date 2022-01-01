@@ -1,7 +1,8 @@
 import 'package:audio_wave/audio_wave.dart';
 import 'package:chatapp/constants/palette.dart';
+import 'package:flutter/material.dart';
 
-List<AudioWaveBar> waves(List<double> decibelList) {
+List<AudioWaveBar> waves(List<double> decibelList, Color color) {
   List<AudioWaveBar> bars = [];
   List<double> decList = List.from(decibelList);
 
@@ -19,15 +20,13 @@ List<AudioWaveBar> waves(List<double> decibelList) {
       }
     }
   }
-
-   
-
+  print(decList.length);
   for (var dec in decList) {
     dec = dec - 20;
     if (!(dec.isNegative)) {
-      bars.add(AudioWaveBar(height: dec, color: Palette.secondaryColor));
+      bars.add(AudioWaveBar(height: dec, color: color));
     } else {
-      bars.add(AudioWaveBar(height: 0, color: Palette.secondaryColor));
+      bars.add(AudioWaveBar(height: 2, color: color));
     }
   }
   return bars;
@@ -38,12 +37,12 @@ double findWidth(List<double> decibelList) {
   if (len < 6) {
     return 60.0;
   } else if (len < 12) {
-    return 100.0;
+    return 90.0;
   } else if (len < 18) {
     return 120.0;
   } else if (len < 26) {
     return 160.0;
   } else {
-    return 180.0;
+    return 200.0;
   }
 }

@@ -29,7 +29,7 @@ class ChatMediaWidget extends StatelessWidget {
         child: Image.file(
           File(parseModel.messageModel.contentUri),
 
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.contain,
         ),
       ),
     );
