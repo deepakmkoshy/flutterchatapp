@@ -45,7 +45,7 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
               color: Colors.grey[200],
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -83,7 +83,7 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
                       animation: false,
                       beatRate: const Duration(milliseconds: 300),
                       width: 100,
-                      height: 70,
+                      height: 80,
                       animationLoop: 0,
                       bars: waves(widget.parseModel.messageModel.decibelList!),
                     ),

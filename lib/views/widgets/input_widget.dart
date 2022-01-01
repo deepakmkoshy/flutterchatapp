@@ -21,6 +21,7 @@ class _InputWidgetState extends State<InputWidget> {
   final TextEditingController _chatEditingController = TextEditingController();
   bool sendButtonVisible = false;
   bool recordButtonVisible = true;
+  late FocusNode myFocusNode;
 
   @override
   void didChangeDependencies() {
@@ -31,11 +32,13 @@ class _InputWidgetState extends State<InputWidget> {
   @override
   void initState() {
     super.initState();
+    myFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _chatEditingController.dispose();
+    myFocusNode.dispose();
     super.dispose();
   }
 
@@ -52,6 +55,7 @@ class _InputWidgetState extends State<InputWidget> {
           IconButton(
             icon: const Icon(Icons.emoji_emotions),
             onPressed: () {
+              myFocusNode.requestFocus();
               print('Implement emoji picker here');
             },
           ),
@@ -60,8 +64,8 @@ class _InputWidgetState extends State<InputWidget> {
               icon: const Icon(Icons.add_photo_alternate),
               onPressed: () async {
                 final ImagePicker _picker = ImagePicker();
-                final XFile? image =
-                    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+                final XFile? image = await _picker.pickImage(
+                    source: ImageSource.gallery, imageQuality: 50);
 
                 if (image == null) {
                   return;
@@ -69,8 +73,8 @@ class _InputWidgetState extends State<InputWidget> {
 
                 final appDir = await getApplicationDocumentsDirectory();
                 final fileName = p.basename(image.path);
-                
-                    await image.saveTo('${appDir.path}/$fileName');
+
+                await image.saveTo('${appDir.path}/$fileName');
 
                 MessageModel newMessage = MessageModel(
                     senderId: context.read<MessageProvider>().currentUser,
@@ -86,6 +90,7 @@ class _InputWidgetState extends State<InputWidget> {
           ),
           Expanded(
             child: TextField(
+              focusNode: myFocusNode,
               cursorColor: Palette.secondaryColor,
               controller: _chatEditingController,
               decoration: InputDecoration(
@@ -136,14 +141,12 @@ class _InputWidgetState extends State<InputWidget> {
                 child: GestureDetector(
                   onLongPress: () async {
                     sendButtonVisible = false;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Recording... Release to sent'),
-                      ),
-                    );
+                    _chatEditingController.text = 'Recording...';
+
                     value.record();
                   },
                   onLongPressEnd: (longPressEndDetails) async {
+                    _chatEditingController.clear();
                     await value.stopRecorder();
                     MessageModel newMessage = MessageModel(
                       senderId: context.read<MessageProvider>().currentUser,

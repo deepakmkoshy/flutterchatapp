@@ -27,27 +27,32 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Chat',
-          style: Theme.of(context).textTheme.headline5,
+
+    // Gesture detector to remove focus from textfield when it's clicked outside
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'Chat',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          elevation: 0,
         ),
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Consumer<MessageProvider>(
-                builder: (context, value, child) => MessageStream(
-                  messageModels: value.messageModels,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: Consumer<MessageProvider>(
+                  builder: (context, value, child) => MessageStream(
+                    messageModels: value.messageModels,
+                  ),
                 ),
               ),
-            ),
-            InputWidget()
-          ],
+              InputWidget()
+            ],
+          ),
         ),
       ),
     );

@@ -42,14 +42,13 @@ class AudioProvider extends ChangeNotifier {
     });
     openTheRecorder().then((value) {
       _mRecorderIsInited = true; //reduntant
-      notifyListeners();
-    });
 
-    _mRecorder.setSubscriptionDuration(Duration(milliseconds: 300));
-    var _audioRecorderSubscription = _mRecorder.onProgress!.listen((e) {
-      decibelList.add(e.decibels!);
-      print('&&&&&&&&&&&&&&\t   DB level ${e.decibels}');
-      // _dbLevel = e.decibels!;
+      _mRecorder.setSubscriptionDuration(Duration(milliseconds: 300));
+      var _audioRecorderSubscription = _mRecorder.onProgress!.listen((e) {
+        decibelList.add(e.decibels!);
+        print('&&&&&&&&&&&&&&\t   DB level ${e.decibels}');
+      });
+      notifyListeners();
     });
   }
 
@@ -89,8 +88,6 @@ class AudioProvider extends ChangeNotifier {
   // Future<void> getAudioDetails(){
   //   flutterSoundHelper.
   // }
-
- 
 
   Future<void> record() async {
     decibelList.clear();
