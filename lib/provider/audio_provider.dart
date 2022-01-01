@@ -1,12 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+
+import '../services/random_string.dart';
 
 class AudioProvider extends ChangeNotifier {
 // TMP utils to be moved to other folder
@@ -90,11 +90,7 @@ class AudioProvider extends ChangeNotifier {
   //   flutterSoundHelper.
   // }
 
-  String getRandString(int len) {
-    var random = Random.secure();
-    var values = List<int>.generate(len, (i) => random.nextInt(255));
-    return base64UrlEncode(values);
-  }
+ 
 
   Future<void> record() async {
     decibelList.clear();

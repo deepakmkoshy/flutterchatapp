@@ -33,7 +33,7 @@ class _ChatVoiceWidgetState extends State<ChatVoiceWidget> {
           // ),
           Consumer<AudioProvider>(
             builder: (context, value, child) => Material(
-              elevation: 2,
+              elevation: 1,
 
               borderRadius: BorderRadius.only(
                 topRight: isMe() ? Radius.zero : Radius.circular(30),

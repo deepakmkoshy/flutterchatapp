@@ -1,9 +1,14 @@
 import 'package:chatapp/constants/palette.dart';
-import 'package:chatapp/provider/audio_provider.dart';
 import 'package:chatapp/models/message_model.dart';
+import 'package:chatapp/provider/audio_provider.dart';
 import 'package:chatapp/provider/message_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../services/random_string.dart';
 
 class InputWidget extends StatefulWidget {
   InputWidget({Key? key}) : super(key: key);
@@ -50,11 +55,34 @@ class _InputWidgetState extends State<InputWidget> {
               print('Implement emoji picker here');
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.add_photo_alternate),
-            onPressed: () {
-              print('Implement photo picker here');
-            },
+          Consumer<MessageProvider>(
+            builder: (context, value, child) => IconButton(
+              icon: const Icon(Icons.add_photo_alternate),
+              onPressed: () async {
+                final ImagePicker _picker = ImagePicker();
+                final XFile? image =
+                    await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+
+                if (image == null) {
+                  return;
+                }
+
+                final appDir = await getApplicationDocumentsDirectory();
+                final fileName = p.basename(image.path);
+                
+                    await image.saveTo('${appDir.path}/$fileName');
+
+                MessageModel newMessage = MessageModel(
+                    senderId: context.read<MessageProvider>().currentUser,
+                    sentTime: DateTime.now(),
+                    content: Content.media,
+                    contentUri: '${appDir.path}/$fileName',
+                    decibelList: []);
+
+                value.addMessage(newMessage);
+                // setState(() {});
+              },
+            ),
           ),
           Expanded(
             child: TextField(
@@ -128,7 +156,7 @@ class _InputWidgetState extends State<InputWidget> {
                     msg.addMessage(newMessage);
                     print('Voice Note Sent');
                   },
-                  child:const Padding(
+                  child: const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
                       Icons.mic,

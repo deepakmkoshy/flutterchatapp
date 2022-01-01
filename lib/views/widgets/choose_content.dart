@@ -36,10 +36,14 @@ class ChooseContent extends StatelessWidget {
                     fontWeight: FontWeight.w800, color: Palette.primaryColor),
               ),
               const SizedBox(width: 10),
+
+              // TODO: Time interpolation to be moved to separate logic
               Text(
                 parseModel.messageModel.sentTime.hour.toString() +
                     ':' +
-                    parseModel.messageModel.sentTime.minute.toString(),
+                    ((parseModel.messageModel.sentTime.minute < 10)
+                        ? '0${parseModel.messageModel.sentTime.minute}'
+                        : parseModel.messageModel.sentTime.minute.toString()),
                 style: TextStyle(fontSize: 12, color: Palette.primaryColor),
               ),
             ],
