@@ -1,16 +1,16 @@
 import 'package:chatapp/constants/palette.dart';
 import 'package:chatapp/models/message_model.dart';
-import 'package:chatapp/services/find_photoURL.dart';
 import 'package:flutter/material.dart';
 
 class ChatTextWidget extends StatelessWidget {
   final ParseModel parseModel;
-  const ChatTextWidget({required this.parseModel});
+  const ChatTextWidget({Key? key, required this.parseModel}) : super(key: key);
 
   bool isMe() {
     return parseModel.messageModel.senderId == parseModel.currentUserId;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Material(
       elevation: 1,

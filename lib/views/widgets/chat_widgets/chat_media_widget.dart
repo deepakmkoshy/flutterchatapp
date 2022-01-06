@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ChatMediaWidget extends StatelessWidget {
   final ParseModel parseModel;
-  const ChatMediaWidget({required this.parseModel});
+  const ChatMediaWidget({Key? key, required this.parseModel}) : super(key: key);
 
   bool isMe() {
     return parseModel.messageModel.senderId == parseModel.currentUserId;
@@ -16,10 +16,10 @@ class ChatMediaWidget extends StatelessWidget {
     return Material(
       elevation: 1,
       borderRadius: BorderRadius.only(
-        topRight: isMe() ? Radius.zero : Radius.circular(30),
-        topLeft: isMe() ? Radius.circular(30) : Radius.zero,
-        bottomLeft: Radius.circular(30),
-        bottomRight: Radius.circular(30),
+        topRight: isMe() ? Radius.zero : const Radius.circular(30),
+        topLeft: isMe() ? const Radius.circular(30) : Radius.zero,
+        bottomLeft: const Radius.circular(30),
+        bottomRight: const Radius.circular(30),
       ),
       color: Colors.grey[200],
       child: Container(

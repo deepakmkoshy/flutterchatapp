@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
               ),
-              InputWidget()
+              const InputWidget()
             ],
           ),
         ),

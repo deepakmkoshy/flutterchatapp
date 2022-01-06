@@ -7,7 +7,7 @@ import 'chat_widgets/chat_widgets.dart';
 
 class ChooseContent extends StatelessWidget {
   final ParseModel parseModel;
-  const ChooseContent({required this.parseModel});
+  const ChooseContent({Key? key, required this.parseModel}) : super(key: key);
 
   bool isMe() {
     return parseModel.messageModel.senderId == parseModel.currentUserId;

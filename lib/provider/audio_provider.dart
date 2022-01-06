@@ -45,7 +45,6 @@ class AudioProvider extends ChangeNotifier {
       _mRecorder.setSubscriptionDuration(const Duration(milliseconds: 300));
       _mRecorder.onProgress!.listen((e) {
         decibelList.add(e.decibels!);
-        print('&&&&&&&&&&&&&&\t   DB level ${e.decibels}');
       });
       notifyListeners();
     });
@@ -71,11 +70,9 @@ class AudioProvider extends ChangeNotifier {
     _mPlayer.closeAudioSession();
     stopRecorder();
     _mRecorder.closeAudioSession();
-    if (_mPath != null) {
       var outputFile = File(_mPath);
       if (outputFile.existsSync()) {
         outputFile.delete();
-      }
     }
   }
 
@@ -83,10 +80,6 @@ class AudioProvider extends ChangeNotifier {
     await _mPlayer.stopPlayer();
     notifyListeners();
   }
-
-  // Future<void> getAudioDetails(){
-  //   flutterSoundHelper.
-  // }
 
   Future<void> record() async {
     decibelList.clear();
@@ -109,7 +102,6 @@ class AudioProvider extends ChangeNotifier {
 
   Future<void> play(String url) async {
     tmpUrl = url;
-    print(url);
 
     assert(_mPlayerIsInited &&
         _mplaybackReady &&
@@ -127,9 +119,8 @@ class AudioProvider extends ChangeNotifier {
   Future<void> stopRecorder() async {
     await _mRecorder.stopRecorder();
     await duration();
-    notifyListeners();
-    print(
-        "############\n##################\n\nAudio file created at " + _mPath);
     _mplaybackReady = true;
+    notifyListeners();
+    
   }
 }

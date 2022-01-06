@@ -1,5 +1,4 @@
 import 'package:audio_wave/audio_wave.dart';
-import 'package:chatapp/constants/palette.dart';
 import 'package:flutter/material.dart';
 
 List<AudioWaveBar> waves(List<double> decibelList, Color color) {
@@ -20,7 +19,6 @@ List<AudioWaveBar> waves(List<double> decibelList, Color color) {
       }
     }
   }
-  print(decList.length);
   for (var dec in decList) {
     dec = dec - 20;
     if (!(dec.isNegative)) {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class MessageStream extends StatefulWidget {
   final List<MessageModel> messageModels;
-  MessageStream({Key? key, required this.messageModels}) : super(key: key);
+  const MessageStream({Key? key, required this.messageModels}) : super(key: key);
 
   @override
   State<MessageStream> createState() => _MessageStreamState();
@@ -32,7 +32,7 @@ class _MessageStreamState extends State<MessageStream> {
   // Method to scroll to end when a new message arrives
   _scrollToEnd() async {
     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
   }
 
   @override

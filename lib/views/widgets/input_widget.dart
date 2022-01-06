@@ -55,7 +55,7 @@ class _InputWidgetState extends State<InputWidget> {
             icon: const Icon(Icons.emoji_emotions),
             onPressed: () {
               myFocusNode.requestFocus();
-              print('Implement emoji picker here');
+              // TODO: Implement Emoji Picker
             },
           ),
           Consumer<MessageProvider>(
@@ -139,6 +139,8 @@ class _InputWidgetState extends State<InputWidget> {
                 child: GestureDetector(
                   onLongPress: () async {
                     sendButtonVisible = false;
+
+                    // myFocusNode.unfocus()
                     _chatEditingController.text = 'Recording...';
                     value.record();
                   },
